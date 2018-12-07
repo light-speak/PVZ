@@ -4,7 +4,7 @@ import cn.lintyone.androidgame26.Zombie
 import cn.lintyone.androidgame26.plant.ShootPlant
 import cn.lintyone.androidgame26.plant.Bullet
 
-class SnowBullet(shootPlant: ShootPlant) : Bullet("bullet/bullet2.png", shootPlant) {
+class SnowBullet(shootPlant: ShootPlant) : Bullet("bullet/fireBullet.gif", shootPlant) {
     init {
         attack = 10
     }

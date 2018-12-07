@@ -10,20 +10,22 @@ import org.cocos2d.actions.interval.CCSequence
 
 class SunFlower : Plant("plant/SunFlower/Frame%02d.png", 18) {
     private lateinit var sun: Sun
+    var getSunInterval = 15f
+    var removeSunInterval = 8f
 
     init {
         price = 50
-        CCScheduler.sharedScheduler().schedule("createSun", this, 10f, false)
+        CCScheduler.sharedScheduler().schedule("createSun", this, getSunInterval, false)
     }
 
     fun createSun(t: Float) {
         sun = Sun()
         sun.setPosition(position.x - 100, position.y + 40)
-        parent.parent.addChild(sun)
+        this.parent.parent.addChild(sun)
         val jumpTo = CCJumpTo.action(0.5f,
                 ccp(position.x - 100, position.y), 40f, 1)
         val callFunc1 = CCCallFunc.action(this, "addSun")
-        val delayTime = CCDelayTime.action(5f)
+        val delayTime = CCDelayTime.action(removeSunInterval)
         val callFunc2 = CCCallFunc.action(this, "removeSun")
         val sequence = CCSequence.actions(jumpTo, callFunc1, delayTime, callFunc2)
         sun.runAction(sequence)

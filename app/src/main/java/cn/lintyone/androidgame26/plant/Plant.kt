@@ -1,5 +1,9 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.plant.peashooter.Peashooter
+import cn.lintyone.androidgame26.plant.repeater.Repeater
+import cn.lintyone.androidgame26.plant.snowpea.SnowPea
+import cn.lintyone.androidgame26.plant.sunFlower.SunFlower
 import org.cocos2d.actions.base.CCRepeatForever
 import org.cocos2d.actions.interval.CCAnimate
 import org.cocos2d.nodes.CCAnimation
@@ -14,6 +18,24 @@ open class Plant(format: String, number: Int) : CCSprite(String.format(Locale.CH
     var hp = 100
     var price = 0
 
+    companion object {
+        fun getPlantByID(id: Int): Plant {
+            return when (id) {
+                0 -> Peashooter()
+                1 -> SunFlower()
+                2 -> CherryBomb()
+                3 -> WallNut()
+                4 -> PotatoMine()
+                5 -> SnowPea()
+                6 -> Chomper()
+                7 -> Repeater()
+                else -> {
+                    Peashooter()
+                }
+            }
+        }
+    }
+
     init {
         this.setAnchorPoint(0.5f, 0f)
         for (i in 0 until number) {
@@ -26,11 +48,14 @@ open class Plant(format: String, number: Int) : CCSprite(String.format(Locale.CH
         this.runAction(repeatForever)
     }
 
+
     open fun hurtCompute(hurt: Int) {
         hp -= hurt
         if (hp < 0) {
             hp = 0
         }
     }
+
+
 }
 

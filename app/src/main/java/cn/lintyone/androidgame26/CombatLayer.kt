@@ -133,6 +133,9 @@ open class CombatLayer : CCLayer() {
                 }
                 for (plantCard in selectPlantCards) {
                     if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
+                        if (currentSunNumber < Plant.getPlantByID(plantCard.id).price) {
+                            break
+                        }
                         if (plantCard == currentCard) {
                             currentCard.light.opacity = 255
                             selectCard = null
@@ -140,16 +143,7 @@ open class CombatLayer : CCLayer() {
                         }
                         selectCard = plantCard
                         selectCard!!.light.opacity = 100
-                        when (selectCard!!.id) {
-                            0 -> selectPlant = Peashooter()
-                            1 -> selectPlant = SunFlower()
-                            2 -> selectPlant = CherryBomb()
-                            3 -> selectPlant = WallNut()
-                            4 -> selectPlant = PotatoMine()
-                            5 -> selectPlant = SnowPea()
-                            6 -> selectPlant = Chomper()
-                            7 -> selectPlant = Repeater()
-                        }
+                        selectPlant = Plant.getPlantByID(selectCard!!.id)
                     }
                 }
             } else if (selectPlant != null && selectCard != null) {
@@ -195,16 +189,18 @@ open class CombatLayer : CCLayer() {
                 }
             }
             if (CGRect.containsPoint(seedBank.boundingBox, point)) {
-                isMove = false
-                for (plantCard in selectPlantCards) {
-                    if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
-                        val moveTo = CCMoveTo.action(0.1f,
-                                plantCard.dark.position)
-                        plantCard.light.runAction(moveTo)
-                        selectPlantCards.remove(plantCard)
-                        seedChooserBtn.visible = false
-                        isMove = true
-                        break
+                if (!seedChooserBtn.visible) {
+                    isMove = false
+                    for (plantCard in selectPlantCards) {
+                        if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
+                            val moveTo = CCMoveTo.action(0.1f,
+                                    plantCard.dark.position)
+                            plantCard.light.runAction(moveTo)
+                            selectPlantCards.remove(plantCard)
+                            seedChooserBtn.visible = false
+                            isMove = true
+                            break
+                        }
                     }
                 }
             }

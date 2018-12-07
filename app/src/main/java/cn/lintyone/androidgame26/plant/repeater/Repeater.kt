@@ -8,13 +8,15 @@ import org.cocos2d.actions.interval.CCSequence
 
 class Repeater : ShootPlant("plant/Repeater/Frame%02d.png", 15) {
 
+    var repeatInterval = 0.5f
+
     init {
         price = 200
     }
 
     override fun createBullet(t: Float) {
         val peaBullet = PeaBullet(this)
-        val delayTime = CCDelayTime.action(0.3f)
+        val delayTime = CCDelayTime.action(repeatInterval)
         val callFunc = CCCallFunc.action(this, "createBulletTow")
         val sequence = CCSequence.actions(delayTime, callFunc)
         runAction(sequence)
