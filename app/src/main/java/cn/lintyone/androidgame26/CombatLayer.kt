@@ -1,7 +1,8 @@
 package cn.lintyone.androidgame26
 
 import android.view.MotionEvent
-import cn.lintyone.androidgame26.plant.*
+import cn.lintyone.androidgame26.plant.CherryBomb
+import cn.lintyone.androidgame26.plant.Plant
 import cn.lintyone.androidgame26.plant.sunFlower.Sun
 import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.CCScheduler
@@ -144,15 +145,32 @@ open class CombatLayer : CCLayer() {
                     }
                 }
             } else if (selectPlant != null && selectCard != null) {
+
                 val col = (point.x - 220).toInt() / 105
                 val row = (point.y - 40).toInt() / 120
-                if (row >= 0 && col < 9 && row >= 0 && row < 5) {
+                if (col in 0..8 && row in 0..5) {
                     val combatLine = combatLines[row]
                     if (!combatLine.isContainPlant(col)) {
                         combatLine.addPlant(col, selectPlant!!)
                         selectPlant!!.position = pointsTowers[row][col]
                         tmxTiledMap.addChild(selectPlant)
                         addSunNumber(-selectPlant!!.price)
+                        if (selectPlant is CherryBomb) {
+                            (selectPlant as CherryBomb).row = row
+                            (selectPlant as CherryBomb).col = col
+                            (selectPlant as CherryBomb).callback = object : CherryBomb.CallBack {
+                                override fun boom(row: Int, col: Int) {
+                                    combatLines[row].removePlant(col)
+                                    combatLines[row].cherryBoom(col)
+                                    if (row - 1 >= 0) {
+                                        combatLines[row-1].cherryBoom(col)
+                                    }
+                                    if (row + 1 <= 4) {
+                                        combatLines[row+1].cherryBoom(col)
+                                    }
+                                }
+                            }
+                        }
                         selectPlant = null
                         selectCard = null
                     }

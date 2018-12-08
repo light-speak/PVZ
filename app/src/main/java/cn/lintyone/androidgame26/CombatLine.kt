@@ -30,6 +30,13 @@ class CombatLine {
         }
     }
 
+    fun removePlant(col: Int) {
+        if (plants[col] is ShootPlant) {
+            shootPlants.removeAt(col)
+        }
+        plants.remove(col)
+    }
+
     /**
      * 添加僵尸
      * @param zombie 僵尸
@@ -92,6 +99,9 @@ class CombatLine {
         }
     }
 
+    /**
+     * 子弹逻辑
+     */
     fun bulletHurtCompute(t: Float) {
         if (shootPlants.isNotEmpty()) {
             for (shootPlant in shootPlants) {
@@ -127,7 +137,23 @@ class CombatLine {
                     }
                 }
             }
-
         }
     }
+
+    fun cherryBoom(col: Int) {
+        if (zombies.isNotEmpty()) {
+            val left = 280  + (if (col - 1 >= 0) col - 1 else col) * 105
+            val right = 280 + 105 + (col + 1) * 105
+            val iterator = zombies.iterator()
+            while (iterator.hasNext()) {
+                val zombie = iterator.next()
+                if (zombie.position.x > left && zombie.position.x < right) {
+                    zombie.boom()
+                    iterator.remove()
+                }
+            }
+        }
+    }
+
+
 }

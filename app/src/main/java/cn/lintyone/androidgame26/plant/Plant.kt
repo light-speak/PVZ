@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 
 open class Plant(private val format: String, private val number: Int) : CCSprite(String.format(Locale.CHINA, format, 0)) {
 
-    private val frames = ArrayList<CCSpriteFrame>()
+    var frames = ArrayList<CCSpriteFrame>()
     var hp = 100
     var price = 0
 
@@ -38,8 +38,9 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
     }
 
     init {
-
+        ready()
     }
+
 
     open fun ready() {
         this.setAnchorPoint(0.5f, 0f)

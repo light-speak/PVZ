@@ -24,12 +24,12 @@ class ZombieNormal(
         MOVE, ATTACK
     }
 
-    private val speed = 10
+    private val speed = 20
     val attack = 10
     var hp = 100
     var isSlow = false
     var state = State.MOVE
-    lateinit var head : CCSprite
+    lateinit var head: CCSprite
 
     init {
         setAnchorPoint(0.5f, 0f)
@@ -143,6 +143,21 @@ class ZombieNormal(
             frames.add(frame)
         }
         val animation = CCAnimation.animationWithFrames(frames, 0.2f)
+        val animate = CCAnimate.action(animation)
+        val callback = CCCallFunc.action(this, "remove")
+        val sequence = CCSequence.actions(animate, callback)
+        runAction(sequence)
+    }
+
+    fun boom() {
+        stopAllActions()
+        val frames = ArrayList<CCSpriteFrame>()
+        for (i in 1 until 21) {
+            val frame = CCSprite.sprite(String.format(Locale.CHINA,
+                    "zombies/zombies_1/boom/Frame%02d.png", i)).displayedFrame()
+            frames.add(frame)
+        }
+        val animation = CCAnimation.animationWithFrames(frames, 0.1f)
         val animate = CCAnimate.action(animation)
         val callback = CCCallFunc.action(this, "remove")
         val sequence = CCSequence.actions(animate, callback)
