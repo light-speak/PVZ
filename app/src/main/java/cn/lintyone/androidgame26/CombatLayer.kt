@@ -2,11 +2,8 @@ package cn.lintyone.androidgame26
 
 import android.view.MotionEvent
 import cn.lintyone.androidgame26.plant.*
-import cn.lintyone.androidgame26.plant.peashooter.Peashooter
-import cn.lintyone.androidgame26.plant.repeater.Repeater
-import cn.lintyone.androidgame26.plant.snowpea.SnowPea
 import cn.lintyone.androidgame26.plant.sunFlower.Sun
-import cn.lintyone.androidgame26.plant.sunFlower.SunFlower
+import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.CCScheduler
 import org.cocos2d.actions.base.CCRepeatForever
 import org.cocos2d.actions.instant.CCCallFunc
@@ -43,7 +40,7 @@ open class CombatLayer : CCLayer() {
     private val combatLines = ArrayList<CombatLine>()
     private lateinit var pointsPath: ArrayList<CGPoint>
     private lateinit var random: Random
-    var currentSunNumber = 50
+    var currentSunNumber = 500
     private val suns = ArrayList<Sun>()
 
 
@@ -89,7 +86,7 @@ open class CombatLayer : CCLayer() {
         seedBank.setPosition(0f, winSize.height)
         addChild(seedBank)
 
-        label = CCLabel.makeLabel("50", "", 20f)
+        label = CCLabel.makeLabel(currentSunNumber.toString(), "", 20f)
         label.color = ccColor3B.ccBLACK
         label.setPosition(40f, 695f)
         addChild(label)
@@ -109,7 +106,7 @@ open class CombatLayer : CCLayer() {
 
         plantCards = ArrayList()
         selectPlantCards = ArrayList()
-        for (i in 0 until 8) {
+        for (i in 0 until 9) {
             val plantCard = PlantCard(i)
             plantCards.add(plantCard)
             plantCard.dark.setPosition(50 + 60 * i.toFloat(), 590f)
@@ -277,7 +274,13 @@ open class CombatLayer : CCLayer() {
         }
         random = Random()
         update()
-        val delayTime1 = CCDelayTime.action(20f)
+        addZombie(1f)
+        addZombie(1f)
+        addZombie(1f)
+        addZombie(1f)
+        addZombie(1f)
+        addZombie(1f)
+        val delayTime1 = CCDelayTime.action(10f)
         val callFunc1 = CCCallFunc.action(this, "startAddZombie1")
         val delayTime2 = CCDelayTime.action(40f)
         val callFunc2 = CCCallFunc.action(this, "startAddZombie2")
@@ -301,7 +304,7 @@ open class CombatLayer : CCLayer() {
 
     open fun addZombie(t: Float) {
         val i = random.nextInt(5)
-        val zombie = Zombie(this, pointsPath[2 * i],
+        val zombie = ZombieNormal(this, pointsPath[2 * i],
                 pointsPath[2 * i + 1])
         tmxTiledMap.addChild(zombie, 5 - i)
         combatLines[i].addZombie(zombie)
@@ -346,19 +349,7 @@ open class CombatLayer : CCLayer() {
 
     private fun update() {
         for (plantCard in selectPlantCards) {
-            val price = when (plantCard.id) {
-                0 -> 100
-                1 -> 50
-                2 -> 150
-                3 -> 50
-                4 -> 25
-                5 -> 175
-                6 -> 150
-                7 -> 200
-                else -> {
-                    0
-                }
-            }
+            val price = Plant.getPlantByID(plantCard.id).price
             if (currentSunNumber >= price) {
                 plantCard.light.opacity = 255
             } else {

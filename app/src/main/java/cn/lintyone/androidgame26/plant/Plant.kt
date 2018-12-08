@@ -12,7 +12,7 @@ import org.cocos2d.nodes.CCSpriteFrame
 import java.util.*
 import kotlin.collections.ArrayList
 
-open class Plant(format: String, number: Int) : CCSprite(String.format(Locale.CHINA, format, 0)) {
+open class Plant(private val format: String, private val number: Int) : CCSprite(String.format(Locale.CHINA, format, 0)) {
 
     private val frames = ArrayList<CCSpriteFrame>()
     var hp = 100
@@ -29,6 +29,7 @@ open class Plant(format: String, number: Int) : CCSprite(String.format(Locale.CH
                 5 -> SnowPea()
                 6 -> Chomper()
                 7 -> Repeater()
+                8 -> FireTree()
                 else -> {
                     Peashooter()
                 }
@@ -37,6 +38,10 @@ open class Plant(format: String, number: Int) : CCSprite(String.format(Locale.CH
     }
 
     init {
+
+    }
+
+    open fun ready() {
         this.setAnchorPoint(0.5f, 0f)
         for (i in 0 until number) {
             val spriteFrame = CCSprite.sprite(String.format(Locale.CHINA, format, i)).displayedFrame()
