@@ -16,9 +16,9 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
 
     var frames = ArrayList<CCSpriteFrame>()
     var hp = 100
-    var price = 0
 
     companion object {
+
         fun getPlantByID(id: Int): Plant {
             return when (id) {
                 0 -> Peashooter()
@@ -30,8 +30,45 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
                 6 -> Chomper()
                 7 -> Repeater()
                 8 -> FireTree()
+                9 -> Pepper()
                 else -> {
                     Peashooter()
+                }
+            }
+        }
+
+        fun getPriceById(id: Int): Int {
+            return when (id) {
+                0 -> Peashooter.price
+                1 -> SunFlower.price
+                2 -> CherryBomb.price
+                3 -> WallNut.price
+                4 -> PotatoMine.price
+                5 -> SnowPea.price
+                6 -> Chomper.price
+                7 -> Repeater.price
+                8 -> FireTree.price
+                9 -> Pepper.price
+                else -> {
+                    Peashooter.price
+                }
+            }
+        }
+
+        fun getPriceByType(plant: Plant): Int {
+            return when (plant) {
+                is Peashooter -> Peashooter.price
+                is SunFlower -> SunFlower.price
+                is CherryBomb -> CherryBomb.price
+                is WallNut -> WallNut.price
+                is PotatoMine -> PotatoMine.price
+                is SnowPea -> SnowPea.price
+                is Chomper -> Chomper.price
+                is Repeater -> Repeater.price
+                is FireTree -> FireTree.price
+                is Pepper -> Pepper.price
+                else -> {
+                    Peashooter.price
                 }
             }
         }
@@ -61,7 +98,6 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
             hp = 0
         }
     }
-
 
 }
 

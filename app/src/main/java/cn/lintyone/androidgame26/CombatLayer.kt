@@ -33,6 +33,7 @@ open class CombatLayer : CCLayer() {
     private lateinit var plantCards: ArrayList<PlantCard>
     private lateinit var selectPlantCards: ArrayList<PlantCard>
     private lateinit var seedChooserBtn: CCSprite
+    private var seedChooserBtnIsClick = false
     private var isMove = false
     private var isStart = false
     private var selectCard: PlantCard? = null
@@ -107,13 +108,13 @@ open class CombatLayer : CCLayer() {
 
         plantCards = ArrayList()
         selectPlantCards = ArrayList()
-        for (i in 0 until 9) {
+        for (i in 0 until 10) {
             val plantCard = PlantCard(i)
             plantCards.add(plantCard)
-            plantCard.dark.setPosition(50 + 60 * i.toFloat(), 590f)
+            plantCard.dark.setPosition(50 + 60 * (i % 9).toFloat(), 590f - (i / 9) * 80)
             seedChooser.addChild(plantCard.dark)
             plantCards.add(plantCard)
-            plantCard.light.setPosition(50 + 60 * i.toFloat(), 590f)
+            plantCard.light.setPosition(50 + 60 * (i % 9).toFloat(), 590f- (i / 9) * 80)
             seedChooser.addChild(plantCard.light)
         }
         setIsTouchEnabled(true)
@@ -131,7 +132,7 @@ open class CombatLayer : CCLayer() {
                 }
                 for (plantCard in selectPlantCards) {
                     if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
-                        if (currentSunNumber < Plant.getPlantByID(plantCard.id).price) {
+                        if (currentSunNumber < Plant.getPriceById(plantCard.id)) {
                             break
                         }
                         if (plantCard == currentCard) {
@@ -154,7 +155,7 @@ open class CombatLayer : CCLayer() {
                         combatLine.addPlant(col, selectPlant!!)
                         selectPlant!!.position = pointsTowers[row][col]
                         tmxTiledMap.addChild(selectPlant)
-                        addSunNumber(-selectPlant!!.price)
+                        addSunNumber(-Plant.getPriceByType(selectPlant!!))
                         if (selectPlant is CherryBomb) {
                             (selectPlant as CherryBomb).row = row
                             (selectPlant as CherryBomb).col = col
@@ -163,10 +164,10 @@ open class CombatLayer : CCLayer() {
                                     combatLines[row].removePlant(col)
                                     combatLines[row].cherryBoom(col)
                                     if (row - 1 >= 0) {
-                                        combatLines[row-1].cherryBoom(col)
+                                        combatLines[row - 1].cherryBoom(col)
                                     }
                                     if (row + 1 <= 4) {
-                                        combatLines[row+1].cherryBoom(col)
+                                        combatLines[row + 1].cherryBoom(col)
                                     }
                                 }
                             }
@@ -204,7 +205,7 @@ open class CombatLayer : CCLayer() {
                 }
             }
             if (CGRect.containsPoint(seedBank.boundingBox, point)) {
-                if (!seedChooserBtn.visible) {
+                if (!seedChooserBtnIsClick) {
                     isMove = false
                     for (plantCard in selectPlantCards) {
                         if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
@@ -228,6 +229,7 @@ open class CombatLayer : CCLayer() {
             }
             if (seedChooserBtn.visible) {
                 if (CGRect.containsPoint(seedChooserBtn.boundingBox, point)) {
+                    seedChooserBtnIsClick = true
                     for (plantCard in selectPlantCards) {
                         addChild(plantCard.light)
                     }
@@ -367,7 +369,7 @@ open class CombatLayer : CCLayer() {
 
     private fun update() {
         for (plantCard in selectPlantCards) {
-            val price = Plant.getPlantByID(plantCard.id).price
+            val price = Plant.getPriceById(plantCard.id)
             if (currentSunNumber >= price) {
                 plantCard.light.opacity = 255
             } else {

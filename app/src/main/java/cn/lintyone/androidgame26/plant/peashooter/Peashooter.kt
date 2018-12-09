@@ -4,8 +4,8 @@ import cn.lintyone.androidgame26.plant.ShootPlant
 
 class Peashooter : ShootPlant("plant/Peashooter/Frame%02d.png", 13) {
 
-    init {
-        price = 100
+    companion object {
+        const val price = 100
     }
 
     override fun createBullet(t: Float) {

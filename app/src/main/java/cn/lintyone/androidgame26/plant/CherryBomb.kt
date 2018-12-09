@@ -14,9 +14,11 @@ class CherryBomb : Plant("plant/CherryBomb/Frame%02d.png", 19) {
     var col = 0
     lateinit var callback: CherryBomb.CallBack
 
-    init {
-        price = 150
+
+    companion object {
+        const val price = 150
     }
+
 
     override fun ready() {
         this.setAnchorPoint(0.5f, 0f)

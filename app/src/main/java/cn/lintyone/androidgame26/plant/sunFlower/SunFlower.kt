@@ -13,8 +13,14 @@ class SunFlower : Plant("plant/SunFlower/Frame%02d.png", 18) {
     var getSunInterval = 15f
     var removeSunInterval = 8f
 
+
+    companion object {
+        const val price = 50
+    }
+
+
     init {
-        price = 50
+
         CCScheduler.sharedScheduler().schedule("createSun", this, getSunInterval, false)
     }
 

@@ -10,9 +10,11 @@ class Repeater : ShootPlant("plant/Repeater/Frame%02d.png", 15) {
 
     var repeatInterval = 0.5f
 
-    init {
-        price = 200
+
+    companion object {
+        const val price = 200
     }
+
 
     override fun createBullet(t: Float) {
         val peaBullet = PeaBullet(this)

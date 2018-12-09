@@ -1,6 +1,9 @@
 package cn.lintyone.androidgame26
 
 import android.view.View
+import cn.lintyone.androidgame26.plant.Plant
+import cn.lintyone.androidgame26.plant.PotatoMine
+import cn.lintyone.androidgame26.plant.peashooter.Peashooter
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -13,6 +16,6 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        println(        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+        println(Peashooter)
     }
 }

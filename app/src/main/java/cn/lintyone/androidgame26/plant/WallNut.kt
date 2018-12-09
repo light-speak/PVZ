@@ -8,8 +8,14 @@ import org.cocos2d.nodes.CCSpriteFrame
 import java.util.*
 
 class WallNut : Plant("plant/WallNut/high/Frame%02d.png", 16) {
+
+
+    companion object {
+        const val price = 50
+    }
+
+
     init {
-        price = 50
         hp = 600
     }
 

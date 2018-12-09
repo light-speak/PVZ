@@ -1,9 +1,7 @@
 package cn.lintyone.androidgame26
 
 import android.util.SparseArray
-import cn.lintyone.androidgame26.plant.FireTree
-import cn.lintyone.androidgame26.plant.Plant
-import cn.lintyone.androidgame26.plant.ShootPlant
+import cn.lintyone.androidgame26.plant.*
 import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.CCScheduler
 
@@ -11,11 +9,13 @@ class CombatLine {
     private val plants = SparseArray<Plant>()
     private val zombies = ArrayList<ZombieNormal>()
     private val shootPlants = ArrayList<ShootPlant>()
+    private val potatoPlants = ArrayList<PotatoMine>()
 
     init {
         CCScheduler.sharedScheduler().schedule("attackPlant", this, 1f, false)
         CCScheduler.sharedScheduler().schedule("attackZombie", this, 1f, false)
         CCScheduler.sharedScheduler().schedule("bulletHurtCompute", this, 0.1f, false)
+        CCScheduler.sharedScheduler().schedule("potatoHurtCompute", this, 0.1f, false)
     }
 
     /**
@@ -25,9 +25,28 @@ class CombatLine {
      */
     fun addPlant(col: Int, plant: Plant) {
         plants.put(col, plant)
-        if (plant is ShootPlant) {
-            shootPlants.add(plant)
+        when (plant) {
+            is ShootPlant -> {
+                shootPlants.add(plant)
+            }
+            is PotatoMine -> {
+                potatoPlants.add(plant)
+            }
+            is Pepper -> {
+                plant.callback = object : Pepper.Callback {
+                    override fun boom() {
+                        val iterator = zombies.iterator()
+                        while (iterator.hasNext()) {
+                            val zombie = iterator.next()
+                            zombie.boom()
+                            iterator.remove()
+                        }
+                        plants.remove(col)
+                    }
+                }
+            }
         }
+
     }
 
     fun removePlant(col: Int) {
@@ -104,6 +123,7 @@ class CombatLine {
      */
     fun bulletHurtCompute(t: Float) {
         if (shootPlants.isNotEmpty()) {
+            //子弹逻辑
             for (shootPlant in shootPlants) {
                 for (bullet in shootPlant.bullets) {
                     //火炬逻辑
@@ -140,9 +160,46 @@ class CombatLine {
         }
     }
 
+    fun potatoHurtCompute(t: Float) {
+        if (potatoPlants.isNotEmpty()) {
+            //遍历所有格子
+            for (i in 0 until 9) {
+                //植物
+                val temp = plants.get(i)
+                when (temp) {
+                    is PotatoMine -> {
+                        val iterator = zombies.iterator()
+                        while (iterator.hasNext()) {
+                            val zombie = iterator.next()
+                            if (temp.position.x > zombie.position.x - 60 &&
+                                    temp.position.x < zombie.position.x + 60) {
+                                if (temp.canBoom) {
+                                    val iterator2 = zombies.iterator()
+                                    while (iterator2.hasNext()) {
+                                        val zombie2 = iterator2.next()
+                                        if (temp.position.x > zombie2.position.x - 105 &&
+                                                temp.position.x < zombie2.position.x + 105) {
+                                            zombie2.boom()
+                                            iterator2.remove()
+                                        }
+                                    }
+                                    plants.remove(i)
+                                    potatoPlants.remove(temp)
+                                    temp.boom()
+                                }
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     fun cherryBoom(col: Int) {
         if (zombies.isNotEmpty()) {
-            val left = 280  + (if (col - 1 >= 0) col - 1 else col) * 105
+            val left = 280 + (if (col - 1 >= 0) col - 1 else col) * 105
             val right = 280 + 105 + (col + 1) * 105
             val iterator = zombies.iterator()
             while (iterator.hasNext()) {
