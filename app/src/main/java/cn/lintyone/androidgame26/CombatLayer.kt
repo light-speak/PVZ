@@ -80,6 +80,28 @@ open class CombatLayer : CCLayer() {
         val callFunc = CCCallFunc.action(this, "loadChoose")
         val sequence = CCSequence.actions(delayTime, moveBy, callFunc)
         tmxTiledMap.runAction(sequence)
+
+        for (i in 0 until 5) {
+            val pointsTower = ArrayList<CGPoint>()
+            val objectGroupTower = tmxTiledMap.objectGroupNamed("tower$i")
+            val objects2 = objectGroupTower.objects
+            for (obj in objects2) {
+                val x = obj["x"]!!.toFloat()
+                val y = obj["y"]!!.toFloat()
+                pointsTower.add(ccp(x, y))
+            }
+            pointsTowers.add(pointsTower)
+        }
+
+
+        for (i in 0 until 5) {
+            val car = Car()
+            val x = pointsTowers[i][1].x - 108 * 2 + i * 4
+            val y = pointsTowers[i][1].y + 30
+            car.setPosition(x, y)
+            tmxTiledMap.addChild(car)
+            combatLines.add(CombatLine(car))
+        }
     }
 
     fun loadChoose() {
@@ -114,7 +136,7 @@ open class CombatLayer : CCLayer() {
             plantCard.dark.setPosition(50 + 60 * (i % 9).toFloat(), 590f - (i / 9) * 80)
             seedChooser.addChild(plantCard.dark)
             plantCards.add(plantCard)
-            plantCard.light.setPosition(50 + 60 * (i % 9).toFloat(), 590f- (i / 9) * 80)
+            plantCard.light.setPosition(50 + 60 * (i % 9).toFloat(), 590f - (i / 9) * 80)
             seedChooser.addChild(plantCard.light)
         }
         setIsTouchEnabled(true)
@@ -238,6 +260,8 @@ open class CombatLayer : CCLayer() {
                     val callFunc = CCCallFunc.action(this, "startReady")
                     val sequence = CCSequence.actions(moveTo, callFunc)
                     tmxTiledMap.runAction(sequence)
+
+
                 }
             }
         }
@@ -271,20 +295,7 @@ open class CombatLayer : CCLayer() {
         setIsTouchEnabled(true)
         isStart = true
 
-        for (i in 0 until 5) {
-            val pointsTower = ArrayList<CGPoint>()
-            val objectGroupTower = tmxTiledMap.objectGroupNamed("tower$i")
-            val objects = objectGroupTower.objects
-            for (obj in objects) {
-                val x = obj["x"]!!.toFloat()
-                val y = obj["y"]!!.toFloat()
-                pointsTower.add(ccp(x, y))
-            }
-            pointsTowers.add(pointsTower)
-        }
-        for (i in 0 until 5) {
-            combatLines.add(CombatLine())
-        }
+
         pointsPath = ArrayList()
         val objectsGroupPath = tmxTiledMap.objectGroupNamed("path")
         for (obj in objectsGroupPath.objects) {

@@ -13,6 +13,10 @@ class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
 
     private lateinit var boom: CCSprite
     var canBoom = false
+    /**
+     * 种植后等待时间
+     */
+    var waitTime = 10f
 
 
     companion object {
@@ -21,7 +25,7 @@ class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
 
     override fun ready() {
         this.setAnchorPoint(0.5f, 0f)
-        val delay = CCDelayTime.action(7f)
+        val delay = CCDelayTime.action(waitTime)
         val callFunc = CCCallFunc.action(this, "up")
         runAction(CCSequence.actions(delay, callFunc))
     }

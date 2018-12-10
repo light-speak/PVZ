@@ -5,7 +5,7 @@ import cn.lintyone.androidgame26.plant.*
 import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.CCScheduler
 
-class CombatLine {
+class CombatLine(val car: Car) {
     private val plants = SparseArray<Plant>()
     private val zombies = ArrayList<ZombieNormal>()
     private val shootPlants = ArrayList<ShootPlant>()
@@ -14,8 +14,46 @@ class CombatLine {
     init {
         CCScheduler.sharedScheduler().schedule("attackPlant", this, 1f, false)
         CCScheduler.sharedScheduler().schedule("attackZombie", this, 1f, false)
+        CCScheduler.sharedScheduler().schedule("carCompute", this, 0.5f, false)
         CCScheduler.sharedScheduler().schedule("bulletHurtCompute", this, 0.1f, false)
         CCScheduler.sharedScheduler().schedule("potatoHurtCompute", this, 0.1f, false)
+
+        car.callback = object : Car.Callback {
+            override fun hide() {
+                car.visible = false
+            }
+
+            override fun attack() {
+                if (car.visible) {
+                    if (zombies.isNotEmpty()) {
+                        val iterator = zombies.iterator()
+                        while (iterator.hasNext()) {
+                            val zombie = iterator.next()
+                            if (car.position.x > zombie.position.x - 50 &&
+                                    car.position.x < zombie.position.x + 50) {
+                                zombie.die()
+                                iterator.remove()
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 车的逻辑
+     */
+    fun carCompute(t: Float) {
+        if (plants.get(0) == null) {
+            val iterator = zombies.iterator()
+            while (iterator.hasNext()) {
+                val zombie = iterator.next()
+                if (car.position.x > zombie.position.x - 50) {
+                    car.go()
+                }
+            }
+        }
     }
 
     /**
@@ -160,6 +198,9 @@ class CombatLine {
         }
     }
 
+    /**
+     * 土豆计算
+     */
     fun potatoHurtCompute(t: Float) {
         if (potatoPlants.isNotEmpty()) {
             //遍历所有格子
@@ -197,6 +238,10 @@ class CombatLine {
     }
 
 
+    /**
+     * 樱桃爆炸
+     * @param col 列
+     */
     fun cherryBoom(col: Int) {
         if (zombies.isNotEmpty()) {
             val left = 280 + (if (col - 1 >= 0) col - 1 else col) * 105

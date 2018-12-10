@@ -23,7 +23,7 @@ class ZombieNormal(
     enum class State {
         MOVE, ATTACK
     }
-
+//20
     private val speed = 20
     val attack = 10
     var hp = 100
