@@ -20,7 +20,6 @@ class SunFlower : Plant("plant/SunFlower/Frame%02d.png", 18) {
 
 
     init {
-
         CCScheduler.sharedScheduler().schedule("createSun", this, getSunInterval, false)
     }
 
@@ -46,5 +45,9 @@ class SunFlower : Plant("plant/SunFlower/Frame%02d.png", 18) {
         if (!sun.isNowCollect) {
             sun.removeSelf()
         }
+    }
+
+    fun stopScheduler() {
+        CCScheduler.sharedScheduler().unschedule("createSun", this)
     }
 }

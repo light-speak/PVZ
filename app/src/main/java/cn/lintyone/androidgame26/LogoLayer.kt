@@ -45,6 +45,7 @@ open class LogoLayer : CCLayer() {
     }
 
     open fun cg() {
+        Sound.begin()
         val sprite = CCSprite.sprite("cg/cg00.png")
         sprite.setAnchorPoint(0f, 0f)
         addChild(sprite)

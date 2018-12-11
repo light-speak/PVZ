@@ -1,5 +1,6 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.Sound
 import cn.lintyone.androidgame26.plant.peashooter.Peashooter
 import cn.lintyone.androidgame26.plant.repeater.Repeater
 import cn.lintyone.androidgame26.plant.snowpea.SnowPea
@@ -93,6 +94,7 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
 
 
     open fun hurtCompute(hurt: Int) {
+        Sound.chomp()
         hp -= hurt
         if (hp < 0) {
             hp = 0

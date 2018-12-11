@@ -51,6 +51,8 @@ class CombatLine(val car: Car) {
                 val zombie = iterator.next()
                 if (car.position.x > zombie.position.x - 50) {
                     car.go()
+                    Sound.car()
+                    break
                 }
             }
         }
@@ -183,6 +185,7 @@ class CombatLine(val car: Car) {
                             val zombie = iterator.next()
                             if (bullet.visible && bullet.position.x > zombie.position.x - 20 &&
                                     bullet.position.x < zombie.position.x + 20) {
+                                Sound.attack()
                                 bullet.showBulletBlast(zombie)
                                 bullet.visible = false
                                 zombie.hurtCompute(bullet.attack)

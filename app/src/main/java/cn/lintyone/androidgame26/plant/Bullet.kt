@@ -1,5 +1,6 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.Sound
 import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.base.CCRepeatForever
 import org.cocos2d.actions.instant.CCCallFunc
@@ -41,6 +42,7 @@ abstract class Bullet(filePath: String, private val shootPlant: ShootPlant) : CC
     }
 
     private fun ready() {
+        Sound.shoot()
         this.setPosition(shootPlant.position.x + 30, shootPlant.position.y + 55)
         shootPlant.parent.addChild(this, 6)
         shootPlant.bullets.add(this)

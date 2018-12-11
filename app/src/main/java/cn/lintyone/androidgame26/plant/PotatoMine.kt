@@ -1,5 +1,6 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.Sound
 import org.cocos2d.actions.base.CCRepeatForever
 import org.cocos2d.actions.instant.CCCallFunc
 import org.cocos2d.actions.interval.CCAnimate
@@ -13,10 +14,7 @@ class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
 
     private lateinit var boom: CCSprite
     var canBoom = false
-    /**
-     * 种植后等待时间
-     */
-    var waitTime = 10f
+
 
 
     companion object {
@@ -25,7 +23,7 @@ class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
 
     override fun ready() {
         this.setAnchorPoint(0.5f, 0f)
-        val delay = CCDelayTime.action(waitTime)
+        val delay = CCDelayTime.action(10f)
         val callFunc = CCCallFunc.action(this, "up")
         runAction(CCSequence.actions(delay, callFunc))
     }
@@ -51,6 +49,7 @@ class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
         val delay = CCDelayTime.action(0.4f)
         val callFunc = CCCallFunc.action(this, "remove")
         runAction(CCSequence.actions(delay, callFunc))
+        Sound.boom()
     }
 
     fun remove() {

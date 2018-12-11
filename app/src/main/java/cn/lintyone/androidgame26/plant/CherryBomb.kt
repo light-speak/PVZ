@@ -1,5 +1,6 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.Sound
 import org.cocos2d.actions.instant.CCCallFunc
 import org.cocos2d.actions.instant.CCHide
 import org.cocos2d.actions.interval.CCAnimate
@@ -48,6 +49,7 @@ class CherryBomb : Plant("plant/CherryBomb/Frame%02d.png", 19) {
 
     fun boom() {
         callback.boom(row, col)
+        Sound.boom()
     }
 
     fun remove() {

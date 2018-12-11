@@ -26,23 +26,27 @@ class MainActivity : Activity() {
         director.setDisplayFPS(true)
         director.setScreenSize(1280f, 768f)
         val scene = CCScene.node()
-//        scene.addChild(LogoLayer())
-        scene.addChild(CombatLayer())
+        scene.addChild(LogoLayer())
+//        scene.addChild(CombatLayer())
         director.runWithScene(scene)
+        Sound.build(this)
     }
 
     override fun onPause() {
         super.onPause()
+        Sound.onPause()
         director.pause()
     }
 
     override fun onResume() {
         super.onResume()
+        Sound.onResume()
         director.onResume()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        Sound.onDestroy()
         director.end()
     }
 }

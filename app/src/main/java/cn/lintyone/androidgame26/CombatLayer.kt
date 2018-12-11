@@ -4,6 +4,7 @@ import android.view.MotionEvent
 import cn.lintyone.androidgame26.plant.CherryBomb
 import cn.lintyone.androidgame26.plant.Plant
 import cn.lintyone.androidgame26.plant.sunFlower.Sun
+import cn.lintyone.androidgame26.plant.sunFlower.SunFlower
 import cn.lintyone.androidgame26.zombie.ZombieNormal
 import org.cocos2d.actions.CCScheduler
 import org.cocos2d.actions.base.CCRepeatForever
@@ -51,6 +52,7 @@ open class CombatLayer : CCLayer() {
     }
 
     private fun loadMap() {
+        Sound.choose()
         tmxTiledMap = CCTMXTiledMap.tiledMap("combat/map1.tmx")
         addChild(tmxTiledMap)
         val objectGroupShow = tmxTiledMap.objectGroupNamed("show")
@@ -146,6 +148,7 @@ open class CombatLayer : CCLayer() {
         val point = convertTouchToNodeSpace(event)
         if (isStart) {
             if (CGRect.containsPoint(seedBank.boundingBox, point)) {
+                Sound.touch()
                 var currentCard: PlantCard? = null
                 if (selectCard != null) {
                     selectCard!!.light.opacity = 255
@@ -158,9 +161,15 @@ open class CombatLayer : CCLayer() {
                             break
                         }
                         if (plantCard == currentCard) {
+                            if (selectPlant is SunFlower) {
+                                (selectPlant as SunFlower).stopScheduler()
+                            }
                             currentCard.light.opacity = 255
                             selectCard = null
                             break
+                        }
+                        if (selectPlant is SunFlower) {
+                            (selectPlant as SunFlower).stopScheduler()
                         }
                         selectCard = plantCard
                         selectCard!!.light.opacity = 100
@@ -168,7 +177,7 @@ open class CombatLayer : CCLayer() {
                     }
                 }
             } else if (selectPlant != null && selectCard != null) {
-
+                Sound.plant()
                 val col = (point.x - 220).toInt() / 105
                 val row = (point.y - 40).toInt() / 120
                 if (col in 0..8 && row in 0..5) {
@@ -203,6 +212,7 @@ open class CombatLayer : CCLayer() {
                 for (sun in suns) {
                     if (CGRect.containsPoint(sun.boundingBox, point)) {
                         sun.collect()
+                        Sound.touch()
                     }
                 }
             }
@@ -211,6 +221,7 @@ open class CombatLayer : CCLayer() {
 
             if (CGRect.containsPoint(seedChooser.boundingBox, point)) {
                 if (selectPlantCards.size < 6) {
+                    Sound.touch()
                     for (plantCard in plantCards) {
                         if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
                             if (!selectPlantCards.contains(plantCard)) {
@@ -228,6 +239,7 @@ open class CombatLayer : CCLayer() {
             }
             if (CGRect.containsPoint(seedBank.boundingBox, point)) {
                 if (!seedChooserBtnIsClick) {
+                    Sound.touch()
                     isMove = false
                     for (plantCard in selectPlantCards) {
                         if (CGRect.containsPoint(plantCard.light.boundingBox, point)) {
@@ -250,6 +262,7 @@ open class CombatLayer : CCLayer() {
                 }
             }
             if (seedChooserBtn.visible) {
+                Sound.touch()
                 if (CGRect.containsPoint(seedChooserBtn.boundingBox, point)) {
                     seedChooserBtnIsClick = true
                     for (plantCard in selectPlantCards) {
@@ -260,8 +273,7 @@ open class CombatLayer : CCLayer() {
                     val callFunc = CCCallFunc.action(this, "startReady")
                     val sequence = CCSequence.actions(moveTo, callFunc)
                     tmxTiledMap.runAction(sequence)
-
-
+                    Sound.coming()
                 }
             }
         }
@@ -311,7 +323,8 @@ open class CombatLayer : CCLayer() {
         addZombie(1f)
         addZombie(1f)
         addZombie(1f)
-        val delayTime1 = CCDelayTime.action(10f)
+        val delayTime1 = CCDelayTime.action(5f)
+        Sound.white()
         val callFunc1 = CCCallFunc.action(this, "startAddZombie1")
         val delayTime2 = CCDelayTime.action(40f)
         val callFunc2 = CCCallFunc.action(this, "startAddZombie2")

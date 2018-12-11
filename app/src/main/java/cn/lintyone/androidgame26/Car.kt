@@ -11,15 +11,19 @@ class Car : CCSprite("car.gif") {
 
     var speed = 1000
     lateinit var callback: Callback
+    var isgo = false
 
     fun go() {
-        val end = ccp(1500f, position.y)
-        val t = CGPointUtil.distance(position, end) / speed
-        val callFunc = CCCallFunc.action(this, "ya")
-        val moveTo = CCMoveTo.action(t, end)
-        val callFunc1 = CCCallFunc.action(this, "over")
-        val sequence = CCSequence.actions(callFunc,moveTo,callFunc1 )
-        runAction(sequence)
+        if (!isgo) {
+            isgo = true
+            val end = ccp(1500f, position.y)
+            val t = CGPointUtil.distance(position, end) / speed
+            val callFunc = CCCallFunc.action(this, "ya")
+            val moveTo = CCMoveTo.action(t, end)
+            val callFunc1 = CCCallFunc.action(this, "over")
+            val sequence = CCSequence.actions(callFunc, moveTo, callFunc1)
+            runAction(sequence)
+        }
     }
 
     fun ya() {

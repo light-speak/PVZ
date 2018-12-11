@@ -1,5 +1,6 @@
 package cn.lintyone.androidgame26.plant
 
+import cn.lintyone.androidgame26.Sound
 import org.cocos2d.actions.instant.CCCallFunc
 import org.cocos2d.actions.interval.CCAnimate
 import org.cocos2d.actions.interval.CCSequence
@@ -41,6 +42,7 @@ class Pepper : Plant("plant/pepper/Frame%02d.png", 8) {
         val over = CCCallFunc.action(this, "over")
         runAction(CCSequence.actions(animate, over))
         callback.boom()
+        Sound.boom()
     }
 
     fun over() {

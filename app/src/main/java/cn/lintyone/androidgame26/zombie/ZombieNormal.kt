@@ -1,6 +1,7 @@
 package cn.lintyone.androidgame26.zombie
 
 import cn.lintyone.androidgame26.CombatLayer
+import cn.lintyone.androidgame26.Sound
 import org.cocos2d.actions.base.CCRepeatForever
 import org.cocos2d.actions.base.CCSpeed
 import org.cocos2d.actions.instant.CCCallFunc
