@@ -93,8 +93,8 @@ open class CombatLayer : CCLayer() {
                 pointsTower.add(ccp(x, y))
             }
             pointsTowers.add(pointsTower)
-        }
 
+        }
 
         for (i in 0 until 5) {
             val car = Car()
@@ -317,9 +317,6 @@ open class CombatLayer : CCLayer() {
         }
         random = Random()
         update()
-        addZombie(1f)
-        addZombie(1f)
-        addZombie(1f)
         addZombie(1f)
         addZombie(1f)
         addZombie(1f)

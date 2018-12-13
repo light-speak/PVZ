@@ -10,7 +10,7 @@ import org.cocos2d.nodes.CCAnimation
 import org.cocos2d.nodes.CCSprite
 import java.util.*
 
-class PotatoMine : Plant("plant/PotatoMine/noReady.gif", 0) {
+class PotatoMine : Plant("plant/PotatoMine/noReady.png", 0) {
 
     private lateinit var boom: CCSprite
     var canBoom = false

@@ -10,6 +10,8 @@ class CombatLine(val car: Car) {
     private val zombies = ArrayList<ZombieNormal>()
     private val shootPlants = ArrayList<ShootPlant>()
     private val potatoPlants = ArrayList<PotatoMine>()
+    private val chomperPlants = ArrayList<Chomper>()
+
 
     init {
         CCScheduler.sharedScheduler().schedule("attackPlant", this, 1f, false)
@@ -49,7 +51,7 @@ class CombatLine(val car: Car) {
             val iterator = zombies.iterator()
             while (iterator.hasNext()) {
                 val zombie = iterator.next()
-                if (car.position.x > zombie.position.x - 50) {
+                if (car.position.x > zombie.position.x - 80 && !car.isGO) {
                     car.go()
                     Sound.car()
                     break
@@ -84,6 +86,9 @@ class CombatLine(val car: Car) {
                         plants.remove(col)
                     }
                 }
+            }
+            is Chomper -> {
+                chomperPlants.add(plant)
             }
         }
 
@@ -232,6 +237,22 @@ class CombatLine(val car: Car) {
                                     temp.boom()
                                 }
                                 break
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (chomperPlants.isNotEmpty()) {
+            if (zombies.isNotEmpty()) {
+                for (chomper in chomperPlants) {
+                    val iterator = zombies.iterator()
+                    while (iterator.hasNext()) {
+                        val zombie = iterator.next()
+                        if (chomper.position.x > zombie.position.x - 150) {
+                            if (chomper.canEat) {
+                                iterator.remove()
+                                chomper.eat(zombie)
                             }
                         }
                     }

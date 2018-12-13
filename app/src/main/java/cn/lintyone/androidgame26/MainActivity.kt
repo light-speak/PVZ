@@ -26,8 +26,8 @@ class MainActivity : Activity() {
         director.setDisplayFPS(true)
         director.setScreenSize(1280f, 768f)
         val scene = CCScene.node()
-        scene.addChild(LogoLayer())
-//        scene.addChild(CombatLayer())
+//        scene.addChild(LogoLayer())
+        scene.addChild(CombatLayer())
         director.runWithScene(scene)
         Sound.build(this)
     }

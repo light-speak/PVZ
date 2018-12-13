@@ -127,7 +127,7 @@ class ZombieNormal(
 
     fun die() {
         stopAllActions()
-        val sprite = CCSprite.sprite("zombies/zombies_1/die/head.gif")
+        val sprite = CCSprite.sprite("zombies/zombies_1/die/head.png")
         sprite.position = position
         parent.parent.addChild(sprite)
         val jumpTo = CCJumpTo.action(1f,

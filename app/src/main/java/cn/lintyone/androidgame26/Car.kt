@@ -7,15 +7,15 @@ import org.cocos2d.actions.interval.CCSequence
 import org.cocos2d.nodes.CCSprite
 import org.cocos2d.types.util.CGPointUtil
 
-class Car : CCSprite("car.gif") {
+class Car : CCSprite("car.png") {
 
     var speed = 1000
     lateinit var callback: Callback
-    var isgo = false
+    var isGO = false
 
     fun go() {
-        if (!isgo) {
-            isgo = true
+        if (!isGO) {
+            isGO = true
             val end = ccp(1500f, position.y)
             val t = CGPointUtil.distance(position, end) / speed
             val callFunc = CCCallFunc.action(this, "ya")

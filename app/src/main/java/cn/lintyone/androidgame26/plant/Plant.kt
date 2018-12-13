@@ -18,6 +18,7 @@ open class Plant(private val format: String, private val number: Int) : CCSprite
     var frames = ArrayList<CCSpriteFrame>()
     var hp = 100
 
+
     companion object {
 
         fun getPlantByID(id: Int): Plant {
